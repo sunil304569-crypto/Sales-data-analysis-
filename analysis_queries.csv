@@ -1,0 +1,63 @@
+SQL_Queries
+------View all data------
+SELECT * FROM sales_data;
+------total revenue ------
+SELECT SUM(total_sales) AS total_revenue
+FROM sales_data;
+------total units sold------
+SELECT SUM(units_sold) AS total_units
+FROM sales_data;
+------number of orders------
+SELECT COUNT(DISTINCT order_id) AS total_orders
+FROM sales_data;
+------revenue by region------
+"SELECT region,"
+SUM(total_sales) AS revenue
+FROM sales_data
+GROUP BY region
+ORDER BY revenue DESC;
+------revenue by product------
+"SELECT product,"
+SUM(total_sales) AS revenue
+FROM sales_data
+GROUP BY product
+ORDER BY revenue DESC;
+------top 3 salesperson------
+"SELECT salesperson,"
+SUM(total_sales) AS revenue
+FROM sales_data
+GROUP BY salesperson
+ORDER BY revenue DESC
+LIMIT 3;
+------montly sales trend-------
+"SELECT DATE_FORMAT(order_date, '%Y-%m') AS month,"
+SUM(total_sales) AS monthly_revenue
+FROM sales_data
+GROUP BY month
+ORDER BY month;
+------best selling product------
+"SELECT product,"
+SUM(units_sold) AS total_units
+FROM sales_data
+GROUP BY product
+ORDER BY total_units DESC
+LIMIT 1;
+------highest revenue order-------
+SELECT *
+FROM sales_data
+ORDER BY total_sales DESC
+LIMIT 1;
+-------region contribution %------
+"SELECT region,"
+"SUM(total_sales) AS revenue,"
+ROUND(100 * SUM(total_sales) /
+"(SELECT SUM(total_sales) FROM sales_data), 2) AS contribution_percentage"
+FROM sales_data
+GROUP BY region
+ORDER BY revenue DESC;
+------rank salesperson------
+"SELECT salesperson,"
+"SUM(total_sales) AS revenue,"
+RANK() OVER (ORDER BY SUM(total_sales) DESC) AS sales_rank
+FROM sales_data
+GROUP BY salesperson;
